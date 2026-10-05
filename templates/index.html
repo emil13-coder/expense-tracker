@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер расходов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>💰 Мои расходы</h1>
+
+    <div class="card">
+        <h2>Бюджет на {{ month_label }}</h2>
+
+        <form action="/budget" method="POST" class="form-row">
+            <input type="number" name="budget" placeholder="Лимит на месяц, ₽"
+                   value="{{ '%.0f'|format(budget) if budget else '' }}" min="1" step="0.01" required>
+            <button type="submit" class="btn">Сохранить лимит</button>
+        </form>
+
+        {% if budget > 0 %}
+        <p>Потрачено в этом месяце: <b>{{ "%.2f"|format(month_spent) }}</b> из {{ "%.2f"|format(budget) }} ₽</p>
+        <div class="progress">
+            <div class="progress-bar {{ 'over' if month_spent > budget }}" style="width: {{ percent }}%;"></div>
+        </div>
+        {% if month_spent > budget %}
+        <p class="over-text">Перерасход: {{ "%.2f"|format(month_spent - budget) }} ₽</p>
+        {% else %}
+        <p>Осталось: {{ "%.2f"|format(remaining) }} ₽</p>
+        {% endif %}
+        {% else %}
+        <p class="muted">Лимит пока не задан.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Добавить расход</h2>
+        <form action="/add" method="POST" class="form-row">
+            <input type="date" name="date" required>
+            <select name="category">
+                <option>Еда</option>
+                <option>Транспорт</option>
+                <option>Развлечения</option>
+                <option>Учёба</option>
+                <option>Другое</option>
+            </select>
+            <input type="number" name="amount" placeholder="Сумма" step="0.01" min="0.01" required>
+            <input type="text" name="comment" placeholder="Комментарий">
+            <button type="submit" class="btn">Добавить</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Все расходы</h2>
+        {% if expenses %}
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Дата</th>
+                    <th>Категория</th>
+                    <th>Сумма, ₽</th>
+                    <th>Комментарий</th>
+                    <th></th>
+                </tr>
+                {% for e in expenses %}
+                <tr>
+                    <td>{{ e.date }}</td>
+                    <td>{{ e.category }}</td>
+                    <td>{{ "%.2f"|format(e.amount) }}</td>
+                    <td>{{ e.comment }}</td>
+                    <td class="actions">
+                        <a href="/edit/{{ e.id }}">Изменить</a>
+                        <form action="/delete/{{ e.id }}" method="POST"
+                              onsubmit="return confirm('Удалить этот расход?');">
+                            <button type="submit" class="btn btn-danger btn-small">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="total">Итого за всё время: {{ "%.2f"|format(total) }} ₽</p>
+        {% else %}
+        <p class="muted">Пока нет расходов. Добавь первый!</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Расходы по категориям</h2>
+        {% if labels %}
+        <div class="chart-box">
+            <canvas id="categoryChart"></canvas>
+        </div>
+        {% else %}
+        <p class="muted">Пока нет данных для диаграммы.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if labels %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById("categoryChart"), {
+        type: "doughnut",
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: [{ data: {{ values|tojson }} }]
+        }
+    });
+</script>
+{% endif %}
+</body>
+</html>

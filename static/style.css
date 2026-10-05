@@ -1,0 +1,100 @@
+:root {
+    --primary: #059669;
+    --primary-dark: #047857;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --bg: #f3f4f6;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(rgba(2, 44, 34, 0.75), rgba(2, 44, 34, 0.75)),
+                url("/static/stars.jpg") center / cover fixed;
+    color: var(--text);
+    margin: 0;
+    padding: 24px 12px;
+    min-height: 100vh;
+}
+
+.container { max-width: 800px; margin: 0 auto; }
+
+h1 { text-align: center; margin: 0 0 24px; color: white; }
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 { margin: 0 0 16px; font-size: 1.15rem; }
+
+.form-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+input, select {
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+input[type="text"] { flex: 1; min-width: 140px; }
+
+.btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.btn:hover { background: var(--primary-dark); }
+
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #b91c1c; }
+
+.btn-small { padding: 5px 10px; font-size: 0.85rem; }
+
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+
+th, td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.actions { white-space: nowrap; }
+.actions a { color: var(--primary); text-decoration: none; margin-right: 8px; }
+.actions form { display: inline; }
+
+.total { text-align: right; font-weight: bold; margin: 16px 0 0; }
+
+.progress {
+    background: var(--border);
+    border-radius: 999px;
+    height: 16px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+.progress-bar { height: 100%; background: var(--success); }
+.progress-bar.over { background: var(--danger); }
+
+.over-text { color: var(--danger); font-weight: bold; }
+.muted { color: var(--muted); }
+
+.chart-box { max-width: 300px; margin: 0 auto; }
