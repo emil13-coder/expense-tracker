@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container" style="max-width: 400px;">
+    <h1>💰 Трекер расходов</h1>
+
+    <div class="card">
+        <h2>Вход</h2>
+        <form method="POST" class="form-row">
+            <input type="password" name="password" placeholder="Пароль"
+                   required autofocus style="flex: 1;">
+            <button type="submit" class="btn">Войти</button>
+        </form>
+        {% if error %}
+        <p class="over-text">{{ error }}</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
